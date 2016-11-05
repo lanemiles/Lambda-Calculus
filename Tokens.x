@@ -23,6 +23,7 @@ tokens :-
 {
 
 -- The token type:
+
 data Token = TokenLet
            | TokenLambda
            | TokenEq
