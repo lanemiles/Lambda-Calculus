@@ -8,27 +8,31 @@ main :: IO ()
 main = do
     s <- getContents
     let ast = parseLambda (scanTokens s)
-    let reduced_lcexp = eval ast
+    let reduced_lcexp = eval (Map.empty :: Store) ast
     print reduced_lcexp
 
 
 data Error = UnboundVariable VarName deriving (Show)
-data Store = Map VarName LCExp
+type Store = Map VarName LCExp
 
-eval :: Store -> [Statement] -> [LCExp]
-eval st [] = []
-eval st ((Let x e):xs) = undefined : (eval (Map.insert x (evalLCExp st e) st) xs)
-eval st ((LCExp e):xs) = evalLCExp st e : eval st xs
+eval :: Store -> [Statement] -> Either Error [LCExp]
+eval st [] = Right []
+eval st ((Let x e):xs) = case evalLCExp st e of
+        (Left err) -> (Left err)
+        (Right e') -> (:) <$> undefined <*> (eval (Map.insert x e' st) xs)
+eval st ((LCExp e):xs) = (:) <$> evalLCExp st e <*> eval st xs
 
 
 evalLCExp :: Store -> LCExp -> Either Error LCExp
 evalLCExp st (Var k) = case Map.lookup k st of
         Nothing -> Left (UnboundVariable k)
         (Just v) -> Right v
-evalLCExp st (App e1 e2) =  evalLCExp st (subst st e1' x e2') where
-								(Lambda x e1') = evalLCExp st e1
-								e2' = evalLCExp st e2
-evalLCExp st (Lambda x e) = (Lambda x e)
+evalLCExp st (App e1 e2) =  case evalLCExp st e2 of
+                                Left err -> Left err
+                                (Right e2') -> case evalLCExp st e1 of
+                                    Left err -> Left err
+                                    Right (Lambda x e1') -> evalLCExp st (subst st e1' x e2')
+evalLCExp st (Lambda x e) = Right (Lambda x e)
 
 
 subst :: Store -> LCExp -> VarName -> LCExp -> LCExp
