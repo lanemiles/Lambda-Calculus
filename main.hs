@@ -8,7 +8,7 @@ main :: IO ()
 main = do
     s <- getContents
     let ast = parseLambda (scanTokens s)
-    let reduced_lcexp = eval (Map.empty :: Store) ast
+    let reduced_lcexp = Right (filter (/= Empty)) <*> (eval (Map.empty :: Store) ast)
     print reduced_lcexp
 
 
@@ -19,7 +19,7 @@ eval :: Store -> [Statement] -> Either Error [LCExp]
 eval st [] = Right []
 eval st ((Let x e):xs) = case evalLCExp st e of
         (Left err) -> (Left err)
-        (Right e') -> (:) <$> undefined <*> (eval (Map.insert x e' st) xs)
+        (Right e') -> (:) <$> (Right Empty) <*> (eval (Map.insert x e' st) xs)
 eval st ((LCExp e):xs) = (:) <$> evalLCExp st e <*> eval st xs
 
 
