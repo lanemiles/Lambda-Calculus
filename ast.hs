@@ -5,7 +5,7 @@ import Data.Map (Map)
 
 data Error = UnboundVariable VarName
 instance Show Error where
-    show (UnboundVariable y) = "Error: UnboundVariable " ++ y
+    show (UnboundVariable y) = "Error: unbound variable " ++ y
 
 type Store = Map VarName LCExp
 
@@ -30,9 +30,9 @@ instance Show LCExp where
   show (App (Var x) (Var y)) =  x ++ " " ++ y
   show (App (Var x) e2) =  x ++ " (" ++ show e2 ++ ")"
   show (App e1 (Var y)) = "(" ++ show e1 ++ ") " ++ y
-  show (App e1 e2) = "(" ++ show e1 ++ ") (" ++ show e2 ++ ")"
-  show (Lambda x e) = "lambda " ++ x ++ " " ++ showLambda e
+  show (App e1 e2) = "(" ++ show e1 ++ ") " ++ show e2 
+  show (Lambda x e) = "lambda " ++ x ++ showLambda e
 
 showLambda :: LCExp -> String
-showLambda (Lambda x e) = x ++ " " ++ showLambda e
+showLambda (Lambda x e) = " " ++ x ++ showLambda e
 showLambda e = ". " ++ show e
