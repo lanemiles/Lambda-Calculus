@@ -27,7 +27,7 @@ main = do
                                         Left x -> die (show x)
                                         Right x -> putStr (unlines (map show x))
                                 else
-                                    die ("Unbound Variables: " ++ (take (length (prettyPrintUnbound freeVars) - 2) (prettyPrintUnbound freeVars)))
+                                    die ("Error: unbound variable(s) " ++ (take (length (prettyPrintUnbound freeVars) - 2) (prettyPrintUnbound freeVars)))
                     -- N FLAG
                     else
                         let freeVars = freeListify ast in
@@ -37,7 +37,7 @@ main = do
                                         Left x -> die (show x)
                                         Right x -> putStr (unlines (map show x))
                                 else
-                                    die ("Unbound Variables: " ++ (take (length (prettyPrintUnbound freeVars) - 2) (prettyPrintUnbound freeVars)))
+                                    die ("Error: unbound variable(s) " ++ (take (length (prettyPrintUnbound freeVars) - 2) (prettyPrintUnbound freeVars)))
             else
                 if nFlag
                     then

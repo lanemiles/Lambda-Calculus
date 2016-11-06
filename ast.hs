@@ -6,7 +6,7 @@ import Data.Map (Map)
 data Error = UnboundVariable VarName | NotNum
 instance Show Error where
     show (UnboundVariable y) = "Error: unbound variable " ++ y
-    show NotNum = "Couldn't extract a number"
+    show NotNum = "Error: couldn't extract a number"
 
 type Store = Map VarName LCExp
 
