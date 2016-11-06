@@ -3,10 +3,11 @@ import qualified Data.Map as Map
 import Data.Map (Map)
 
 
-data Error = UnboundVariable VarName | NotNum
+data Error = UnboundVariable VarName | NotNum | Empty
 instance Show Error where
     show (UnboundVariable y) = "Error: unbound variable " ++ y
     show NotNum = "Error: couldn't extract a number"
+    show Empty = "Error: empty program"
 
 type Store = Map VarName LCExp
 

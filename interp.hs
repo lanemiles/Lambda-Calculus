@@ -6,7 +6,7 @@ import qualified Data.Set as Set
 import Data.Set (Set)
 
 evalAstNum :: [Statement] -> Either Error [Int]
-evalAstNum = eval' Map.empty
+evalAstNum p = if null p then Left Empty else eval' Map.empty p
 
 eval' :: Store -> [Statement] -> Either Error [Int]
 eval' st [] = Right []
@@ -26,7 +26,7 @@ toInt n Zero = Right n
 toInt _ _ = Left NotNum
 
 evalAst :: [Statement] -> Either Error [LCExp]
-evalAst = eval Map.empty
+evalAst p = if null p then Left Empty else eval Map.empty p
 
 eval :: Store -> [Statement] -> Either Error [LCExp]
 eval st [] = Right []
@@ -45,6 +45,7 @@ evalLCExp st (App e1 e2) =  case evalLCExp st e2 of
                                     Left err -> Left err
                                     Right (Lambda x e1') -> evalLCExp st (subst st e1' x e2')
                                     Right Succ -> Right (SuccX e2')
+                                    _ -> Left NotNum
 evalLCExp st (Lambda x e) = Right (Lambda x e)
 evalLCExp _ Zero = Right Zero
 evalLCExp _ Succ = Right Succ
@@ -63,7 +64,7 @@ subst _ Zero _ _ = Zero
 
 freeListify :: [Statement] -> [VarName]
 freeListify stmts = Set.toAscList(undef)
-	where (def, undef) = free (Set.empty, Set.empty) stmts
+    where (def, undef) = free (Set.empty, Set.empty) stmts
 
 free :: (Set VarName, Set VarName) -> [Statement] -> (Set VarName, Set VarName)
 free (defs, undefs) [] = (defs, undefs)
