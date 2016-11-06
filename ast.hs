@@ -3,9 +3,10 @@ import qualified Data.Map as Map
 import Data.Map (Map)
 
 
-data Error = UnboundVariable VarName
+data Error = UnboundVariable VarName | NotNum
 instance Show Error where
     show (UnboundVariable y) = "Error: unbound variable " ++ y
+    show NotNum = "Couldn't extract a number"
 
 type Store = Map VarName LCExp
 
@@ -21,8 +22,10 @@ type VarName = String
 data LCExp = Var VarName
     | App LCExp LCExp
     | Lambda VarName LCExp
-    | Empty
-    deriving (Eq)
+    | Zero
+    | Succ
+    | SuccX LCExp
+    deriving Eq
 
 
 instance Show LCExp where
@@ -33,6 +36,8 @@ instance Show LCExp where
   show (App e1 (Var y)) = show e1 ++ " " ++ y
   show (App e1 e2) = "(" ++ show e1 ++ ") " ++ show e2 
   show (Lambda x e) = "lambda " ++ x ++ showLambda e
+  show Succ = "Succ"
+  show Zero = "Zero"
 
 showLambda :: LCExp -> String
 showLambda (Lambda x e) = " " ++ x ++ showLambda e

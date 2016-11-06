@@ -46,7 +46,7 @@ LCExp :
 {
 
 parseError :: [Token] -> a
-parseError _ = error "Parse error"
+parseError x = error (show x)
 
 
 
