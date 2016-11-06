@@ -13,5 +13,5 @@ let fst = lambda p. p true;
 let snd = lambda p. p false;
 let pred = lambda n. snd (n (lambda p. pair (succ (fst p)) (fst p)) (pair zero zero));
 let Y = lambda f. (lambda x y. f (x x) y) (lambda x y. f (x x) y);
-let fact = Y lambda fact n . (or (isZero n) (isZero (pred one))) one (times fact(pred n) n);
+let fact = Y (lambda factR n. (or (isZero n) (isZero (pred n))) one (times n (lambda x. factR (pred n) x)));
 fact five
