@@ -29,7 +29,8 @@ instance Show LCExp where
   show (Var x) = x
   show (App (Var x) (Var y)) =  x ++ " " ++ y
   show (App (Var x) e2) =  x ++ " (" ++ show e2 ++ ")"
-  show (App e1 (Var y)) = "(" ++ show e1 ++ ") " ++ y
+  show (App (Lambda x e) (Var y)) = "(" ++ show (Lambda x e) ++ ") " ++ y
+  show (App e1 (Var y)) = show e1 ++ " " ++ y
   show (App e1 e2) = "(" ++ show e1 ++ ") " ++ show e2 
   show (Lambda x e) = "lambda " ++ x ++ showLambda e
 
