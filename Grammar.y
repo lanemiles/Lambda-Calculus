@@ -40,7 +40,7 @@ LambdaNoLambda :
     | varName LambdaNoLambda { Lambda $1 $2 } 
 
 LCExp :
-      LCExp LCExp { App $1 $2 }
+      LCExp LCExpNoApp { App $1 $2 }
     | LCExpNoApp { $1 }
 
 {
