@@ -43,7 +43,7 @@ main = do
                     then
                         case evalAstNum ast of
                             Left x -> die (show x)
-                            Right x -> putStr (unlines (map printNum x))
+                            Right x -> putStr (unlines (map show x))
                     -- n flag
                     else 
                         case evalAst ast of
