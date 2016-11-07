@@ -39,13 +39,15 @@ evalLCExp :: Store -> LCExp -> Either Error LCExp
 evalLCExp st (Var k) = case Map.lookup k st of
         Nothing -> Left (UnboundVariable k)
         (Just v) -> Right v
-evalLCExp st (App e1 e2) =  case evalLCExp st e2 of
+evalLCExp st (App e1 e2) =  case evalLCExp st e1 of
                                 Left err -> Left err
-                                (Right e2') -> case evalLCExp st e1 of
+                                Right (Lambda x e1') -> case evalLCExp st e2 of
                                     Left err -> Left err
-                                    Right (Lambda x e1') -> evalLCExp st (subst st e1' x e2')
-                                    Right Succ -> Right (SuccX e2')
-                                    _ -> Left NotNum
+                                    Right e2' -> evalLCExp st (subst st e1' x e2')
+                                Right Succ -> case evalLCExp st e2 of
+                                    Left err -> Left err
+                                    Right e2' -> Right (SuccX e2')
+                                _ -> Left NotNum
 evalLCExp st (Lambda x e) = Right (Lambda x e)
 evalLCExp _ Zero = Right Zero
 evalLCExp _ Succ = Right Succ

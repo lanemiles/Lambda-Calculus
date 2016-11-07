@@ -43,13 +43,12 @@ main = do
                     then
                         case evalAstNum ast of
                             Left x -> die (show x)
-                            Right x -> putStr (unlines (map show x))
+                            Right x -> putStr (unlines (map printNum x))
                     -- n flag
                     else 
                         case evalAst ast of
                             Left x -> die (show x)
                             Right x -> putStr (unlines (map show x))
-
 
 
 prettyPrintUnbound :: [String] -> String
