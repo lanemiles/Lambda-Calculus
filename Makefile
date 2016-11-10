@@ -1,6 +1,3 @@
-test : interp test.hs
-	ghc test.hs -main-is Test.mainTest -o tests
-
 interp : interpreter parser ast
 	ghc --make main -o interp
 

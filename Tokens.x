@@ -17,7 +17,6 @@ tokens :-
   \)                            { \s -> TokenRParen }
   \.                            { \s -> TokenPeriod }
   \;                            { \s -> TokenSemicolon }
-  $alpha [$alpha $digit \']*    { \s -> TokenVarName s }
   "let rec"                     { \s -> TokenLetRec }
   \:                            { \s -> TokenColon }
   \,                            { \s -> TokenComma }
@@ -37,7 +36,11 @@ tokens :-
   and                           { \s -> TokenAnd }
   or                            { \s -> TokenOr }
   \=\=                          { \s -> TokenDblEq }
+  int                           { \s -> TokenInt }
+  bool                          { \s -> TokenBool }
+  \-\>                          { \s -> TokenArr }
   $digit+                       { \s -> TokenNum (read s) }
+  $alpha [$alpha $digit \']*    { \s -> TokenVarName s }
 
 
 {
@@ -72,6 +75,9 @@ data Token = TokenLet
            | TokenOr
            | TokenDblEq
            | TokenNum Int
+           | TokenInt
+           | TokenBool
+           | TokenArr
            deriving (Eq,Show)
 
 scanTokens = alexScanTokens

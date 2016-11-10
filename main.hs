@@ -14,9 +14,11 @@ main = do
         programStr <- getProgramStr fileArg args
         let ast = parseInput programStr
 
-        case evalAstNum ast of
-            Left x -> die (show x)
-            Right x -> putStr (unlines (map show x))
+        print ast
+
+        -- case evalAstNum ast of
+        --     Left x -> die (show x)
+        --     Right x -> putStr (unlines (map show x))
 
 
 getProgramStr :: Bool -> [String] -> IO String

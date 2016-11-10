@@ -3,15 +3,16 @@ import qualified Data.Map as Map
 import Data.Map (Map)
 
 
-data Error = UnboundVariable VarName
+data Error = UnboundVariable VarName | Empty
 instance Show Error where
     show (UnboundVariable y) = "Error: unbound variable " ++ y
+    show Empty = "Error: empty program"
 
 type Store = Map VarName LCExp
 
 
-data Statement = Let VarName LCExp LCExp
-         | LetRec VarName LCExp LCExp
+data Statement = LetS VarName LCExp 
+         | LetRecS VarName Type LCExp
          | LCExp LCExp
          deriving Show
 
@@ -39,6 +40,8 @@ data LCExp = Var VarName
     | And LCExp LCExp
     | Or LCExp LCExp
     | Eq LCExp LCExp
+    | Let VarName LCExp LCExp
+    | LetRec VarName Type LCExp LCExp
     deriving (Eq, Show)
 
 data Type = Int
