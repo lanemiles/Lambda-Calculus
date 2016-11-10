@@ -18,6 +18,26 @@ tokens :-
   \.                            { \s -> TokenPeriod }
   \;                            { \s -> TokenSemicolon }
   $alpha [$alpha $digit \']*    { \s -> TokenVarName s }
+  "let rec"                     { \s -> TokenLetRec }
+  \:                            { \s -> TokenColon }
+  \,                            { \s -> TokenComma }
+  if                            { \s -> TokenIf }
+  then                          { \s -> TokenThen }
+  else                          { \s -> TokenElse }
+  in                            { \s -> TokenIn }
+  true                          { \s -> TokenTrue }
+  false                         { \s -> TokenFalse }
+  \-                            { \s -> TokenMinus }
+  not                           { \s -> TokenNot }
+  fst                           { \s -> TokenFst }
+  snd                           { \s -> TokenSnd }
+  \+                            { \s -> TokenPlus }
+  \*                            { \s -> TokenTimes }
+  \/                            { \s -> TokenDiv }
+  and                           { \s -> TokenAnd }
+  or                            { \s -> TokenOr }
+  \=\=                          { \s -> TokenDblEq }
+  $digit+                       { \s -> TokenNum (read s) }
 
 
 {
@@ -32,6 +52,26 @@ data Token = TokenLet
            | TokenPeriod
            | TokenSemicolon
            | TokenVarName String
+           | TokenLetRec
+           | TokenColon
+           | TokenComma
+           | TokenIf
+           | TokenThen
+           | TokenElse
+           | TokenIn
+           | TokenTrue
+           | TokenFalse
+           | TokenMinus
+           | TokenNot
+           | TokenFst
+           | TokenSnd
+           | TokenPlus
+           | TokenTimes
+           | TokenDiv
+           | TokenAnd
+           | TokenOr
+           | TokenDblEq
+           | TokenNum Int
            deriving (Eq,Show)
 
 scanTokens = alexScanTokens

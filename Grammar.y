@@ -10,6 +10,7 @@ import AST
 
 %token
     let { TokenLet }
+    letrec { TokenLetRec }
     lambda  { TokenLambda }
     varName { TokenVarName $$ }
     '=' { TokenEq }
@@ -17,6 +18,25 @@ import AST
     ')' { TokenRParen }
     '.' { TokenPeriod }
     ';' { TokenSemicolon }
+    ':' { TokenColon }
+    ',' { TokenComma }
+    if { TokenIf }
+    then { TokenThen }
+    else { TokenElse }
+    in { TokenIn }
+    true { TokenTrue }
+    false { TokenFalse }
+    '-' { TokenMinus }
+    not { TokenNot }
+    fst { TokenFst }
+    snd { TokenSnd }
+    '+' { TokenPlus }
+    '*' { TokenTimes }
+    '/' { TokenDiv }
+    and { TokenAnd }
+    or { TokenOr }
+    "==" { TokenDblEq }
+    num { TokenNum $$ }
 
 %%
 
@@ -40,7 +60,8 @@ LambdaNoLambda :
     | varName LambdaNoLambda { Lambda $1 $2 } 
 
 LCExp :
-      LCExp LCExpNoApp { App $1 $2 }
+      num { Num $1 }
+    | LCExp LCExpNoApp { App $1 $2 }
     | LCExpNoApp { $1 }
 
 {
