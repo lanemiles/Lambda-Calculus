@@ -57,7 +57,7 @@ Program :
 
 Statement : 
       let varName '=' LCExp { LetS $2 $4 }
-    | let varName ':' Type '=' LCExp{ LetS $2 (HasType $6 $4) }
+    | let varName ':' Type '=' LCExp { LetS $2 (HasType $6 $4) }
     | letrec varName ':' Type '=' LCExp { LetRecS $2 $4 $6 }
     | LCExp { LCExp $1 }
 
@@ -66,6 +66,9 @@ LCExpNoApp :
     | varName { Var $1 } 
     | lambda varName ':' Type '.' LCExp { Lambda $2 $4 $6 }
     | lambda '(' varName ':' Type ')' LambdaNoLambda { Lambda $3 $5 $7 }
+    | num { Num $1 }
+    | true { AST.True }
+    | false { AST.False }
 
 LambdaNoLambda : 
     '.' LCExp { $2 }
@@ -93,7 +96,7 @@ LCExp :
     | LCExp "==" LCExp { Eq $1 $3 }
     | let varName '=' LCExp in LCExp { Let $2 $4 $6 }
     | let varName ':' Type '=' LCExp in LCExp { Let $2 (HasType $6 $4) $8 }
-    | letrec varName ':' Type '='LCExp in LCExp { LetRec $2 $4 $6 $8 }
+    | letrec varName ':' Type '=' LCExp in LCExp { LetRec $2 $4 $6 $8 }
 
 Type :
       int { Int }

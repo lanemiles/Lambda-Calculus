@@ -11,6 +11,7 @@ instance Show Error where
 
 type Store = Map VarName LCExp
 
+type Context = Map VarName Type
 
 data Statement = LetS VarName LCExp 
          | LetRecS VarName Type LCExp
@@ -50,3 +51,11 @@ data Type = Int
     | Func Type Type
     | Tuple Type Type
     deriving (Eq, Show)
+
+
+-- instance Show LCExp where
+--   show (Num n) = show n
+--   show AST.True = "True"
+--   show AST.False = "False"
+--   show (Pair e1 e2) = "(" ++ show e1 ++ ", " ++ show e2 ++ ")"
+--   show _ = "<function>"
