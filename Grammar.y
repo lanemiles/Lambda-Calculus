@@ -41,9 +41,11 @@ import AST
     bool { TokenBool }
     "->" { TokenArr }
 
+%right "=="
 %right in
 %left '+' '-'
 %left '*' '/'
+%left NEG not fst snd
 
 %%
 
@@ -55,17 +57,19 @@ Program :
 
 Statement : 
       let varName '=' LCExp { LetS $2 $4 }
+    | let varName ':' Type '=' LCExp{ LetS $2 (HasType $6 $4) }
     | letrec varName ':' Type '=' LCExp { LetRecS $2 $4 $6 }
     | LCExp { LCExp $1 }
 
 LCExpNoApp :
       '(' LCExp ')' { $2 }
     | varName { Var $1 } 
-    | lambda varName LambdaNoLambda {Lambda $2 $3 }
+    | lambda varName ':' Type '.' LCExp { Lambda $2 $4 $6 }
+    | lambda '(' varName ':' Type ')' LambdaNoLambda { Lambda $3 $5 $7 }
 
 LambdaNoLambda : 
     '.' LCExp { $2 }
-    | varName LambdaNoLambda { Lambda $1 $2 } 
+    | '(' varName ':' Type ')' LambdaNoLambda { Lambda $2 $4 $6 } 
 
 LCExp :
       num { Num $1 }
@@ -76,7 +80,7 @@ LCExp :
     | '(' LCExp ':' Type ')' { HasType $2 $4 }
     | LCExp LCExpNoApp { App $1 $2 }
     | LCExpNoApp { $1 }
-    | '-' LCExp { Neg $2 }
+    | '-' LCExp %prec NEG { Neg $2 }
     | not LCExp { Not $2 }
     | fst LCExp { Fst $2 }
     | snd LCExp { Snd $2 }
@@ -88,6 +92,7 @@ LCExp :
     | LCExp or LCExp { Or $1 $3 }
     | LCExp "==" LCExp { Eq $1 $3 }
     | let varName '=' LCExp in LCExp { Let $2 $4 $6 }
+    | let varName ':' Type '=' LCExp in LCExp { Let $2 (HasType $6 $4) $8 }
     | letrec varName ':' Type '='LCExp in LCExp { LetRec $2 $4 $6 $8 }
 
 Type :
