@@ -10,13 +10,21 @@ main :: IO ()
 main = do
         args <- getArgs
 
+        let uFlag = "-u" `elem` args
         let fileArg = (hasFileArg args)
         programStr <- getProgramStr fileArg args
         let ast = parseInput programStr
-
-        case evalAst ast of
-            Left x -> die (show x)
-            Right x -> putStr (unlines (map show x))
+        
+        if uFlag then 
+            case evalAst ast of
+                Left x -> die (show x)
+                Right x -> putStr (unlines (map show x))
+        else
+            case evalTypesAst ast of
+                Left x -> die (show x)
+                _ -> case evalAst ast of
+                        Left x -> die (show x)
+                        Right x -> putStr (unlines (map show x))
 
 
 getProgramStr :: Bool -> [String] -> IO String

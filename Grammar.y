@@ -43,8 +43,8 @@ import AST
 
 %right "=="
 %right in
-%left '+' '-'
-%left '*' '/'
+%left '+' '-' or
+%left '*' '/' and
 %left NEG not fst snd
 
 %%

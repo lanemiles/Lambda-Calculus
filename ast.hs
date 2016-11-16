@@ -3,11 +3,12 @@ import qualified Data.Map as Map
 import Data.Map (Map)
 
 
-data Error = UnboundVariable VarName | Empty | TypeError
+data Error = UnboundVariable VarName | Empty | TypeError | RecError
 instance Show Error where
     show (UnboundVariable y) = "Error: unbound variable " ++ y
     show Empty = "Error: empty program"
     show TypeError = "Error: mismatched types"
+    show RecError = "Error: recursion"
 
 type Store = Map VarName LCExp
 
@@ -44,7 +45,7 @@ data LCExp = Var VarName
     | Eq LCExp LCExp
     | Let VarName LCExp LCExp
     | LetRec VarName Type LCExp LCExp
-    deriving (Eq, Show)
+    deriving (Eq)
 
 data Type = Int
     | Bool
@@ -53,9 +54,9 @@ data Type = Int
     deriving (Eq, Show)
 
 
--- instance Show LCExp where
---   show (Num n) = show n
---   show AST.True = "True"
---   show AST.False = "False"
---   show (Pair e1 e2) = "(" ++ show e1 ++ ", " ++ show e2 ++ ")"
---   show _ = "<function>"
+instance Show LCExp where
+  show (Num n) = show n
+  show AST.True = "true"
+  show AST.False = "false"
+  show (Pair e1 e2) = "(" ++ show e1 ++ ", " ++ show e2 ++ ")"
+  show _ = "<function>"

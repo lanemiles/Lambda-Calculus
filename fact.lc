@@ -1,17 +1,1 @@
-let true = lambda a b. a;
-let false = lambda a b. b;
-let zero = lambda s z. z;
-let one = lambda s z. s z;
-let five = lambda s z. s (s (s (s (s z))));
-let isZero = lambda n.n (lambda x. false) true;
-let succ = lambda n. lambda s z. s (n s z);
-let plus = lambda m n. m succ n;
-let times = lambda m n. m (plus n) zero;
-let or = lambda b1 b2. b1 true b2;
-let pair = lambda a b. lambda c. c a b;
-let fst = lambda p. p true;
-let snd = lambda p. p false;
-let pred = lambda n. snd (n (lambda p. pair (succ (fst p)) (fst p)) (pair zero zero));
-let Y = lambda f. (lambda x y. f (x x) y) (lambda x y. f (x x) y);
-let fact = Y (lambda factR n. (or (isZero n) (isZero (pred n))) one (times n (lambda x. factR (pred n) x)));
-fact five
+let rec fact : int -> int = lambda x : int. if (x == 0) or (x == 1) then 1 else x * fact (x-1) in fact 5
